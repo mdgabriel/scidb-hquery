@@ -329,7 +329,7 @@ internalManual =
     "   and https://www.paradigm4.com/forum for more information.\n"++
     "\n"++
     "NOTES\n"++
-    "   Please send bug reports to marcus@gabriel.name.\n"++
+    "   Please send bug reports to https://github.com/mdgabriel/scidb-hquery/issues.\n"++
     "\n"++
     "BUGS\n"++
     "   No known bugs to date.\n"

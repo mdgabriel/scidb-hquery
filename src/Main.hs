@@ -378,7 +378,7 @@ for 'hquery':
 >    and https://www.paradigm4.com/forum for more information.
 > 
 > NOTES
->    Please send bug reports to marcus@gabriel.name.
+>    Please send bug reports to https://github.com/mdgabriel/scidb-hquery/issues.
 > 
 > BUGS
 >    No known bugs to date.
@@ -454,8 +454,8 @@ config :: Configuration
 config =
     Config {
             argOrder       = RequireOrder,
-            -- Update revision number: toggle case
-            release        = "2.8.0.429",
+            -- Update revision number: TOGGLE CASE
+            release        = "2.8.0.430",
             flagsOps       = " [[-g|-h|-l|-m|-v|-y] |"++
                              "\n                 [-V n] [-t hstfile] [-c certstore] [-n]"++
                              "\n                   [-r http[s]] [-i host] [-p port] [-a true|false]"++

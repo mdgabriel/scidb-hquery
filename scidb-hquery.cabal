@@ -1,13 +1,13 @@
 cabal-version: 2.4
 name: scidb-hquery
-version: 2.8.0.429
+version: 2.8.0.430
 license: GPL-3.0-only
 license-file: LICENSE
 copyright: All rights reserved 2014-19(c).
 maintainer: marcus@gabriel.name
 author: Marcus D. Gabriel
-homepage: 
-bug-reports:
+homepage: https://github.com/mdgabriel/scidb-hquery.git
+bug-reports: https://github.com/mdgabriel/scidb-hquery/issues
 synopsis: Haskell query for SciDB via shim
 description:
     The command hquery with no operands and no options will begin an
