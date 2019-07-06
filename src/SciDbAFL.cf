@@ -1,0 +1,120 @@
+-- SciDB AFL queries
+
+entrypoints AFL ;
+
+comment "--"      ;
+comment "{-" "-}" ;
+
+-- SciDB reserves certain keywords that you cannot use as identifiers
+-- (such as array names, dimension names, or attribute names). The
+-- lists are language-dependent.
+--
+-- The following words are reserved when using AFL:
+--   and          array    as
+--   asc          between  case
+--   compression  create   default
+--   desc         else     empty
+--   end          false    if
+--   is           not      null
+--   or           reserve  temp
+--   then         true     using
+--   when
+token ResAnd         ["Aa"]["Nn"]["Dd"]                                                 ;
+token ResArray       ["Aa"]["Rr"]["Rr"]["Aa"]["Yy"]                                     ;
+token ResAs          ["Aa"]["Ss"]                                                       ;
+token ResAsc         ["Aa"]["Ss"]["Cc"]                                                 ;
+--ken ResBetween     ["Bb"]["Ee"]["Tt"]["Ww"]["Ee"]["Ee"]["Nn"]                         ; -- Not used here
+--ken ResCase        ["Cc"]["Aa"]["Ss"]["Ee"]                                           ; -- Not used here
+token ResCompression ["Cc"]["Oo"]["Mm"]["Pp"]["Rr"]["Ee"]["Ss"]["Ss"]["Ii"]["Oo"]["Nn"] ;
+token ResCreate      ["Cc"]["Rr"]["Ee"]["Aa"]["Tt"]["Ee"]                               ;
+token ResDefault     ["Dd"]["Ee"]["Ff"]["Aa"]["Uu"]["Ll"]["Tt"]                         ;
+token ResDesc        ["Dd"]["Ee"]["Ss"]["Cc"]                                           ;
+--ken ResElse        ["Ee"]["Ll"]["Ss"]["Ee"]                                           ; -- Not used here
+--ken ResEmpty       ["Ee"]["Mm"]["Pp"]["Tt"]["Yy"]                                     ; -- Not used here
+--ken ResEnd         ["Ee"]["Nn"]["Dd"]                                                 ; -- Not used here
+token ResFalse       ["Ff"]["Aa"]["Ll"]["Ss"]["Ee"]                                     ;
+--ken ResIf          ["Ii"]["Ff"]                                                       ; -- Not used here
+--ken ResIs          ["Ii"]["Ss"]                                                       ; -- Not used here
+token ResNot         ["Nn"]["Oo"]["Tt"]                                                 ;
+token ResNull        ["Nn"]["Uu"]["Ll"]["Ll"]                                           ;
+token ResOr          ["Oo"]["Rr"]                                                       ;
+--ken ResReserve     ["Rr"]["Ee"]["Ss"]["Ee"]["Rr"]["Vv"]["Ee"]                         ; -- Not used here
+token ResTemp        ["Tt"]["Ee"]["Mm"]["Pp"]                                           ;
+--ken ResThen        ["Tt"]["Hh"]["Ee"]["Nn"]                                           ; -- Not used here
+token ResTrue        ["Tt"]["Rr"]["Uu"]["Ee"]                                           ;
+--ken ResUsing       ["Uu"]["Ss"]["Ii"]["Nn"]["Gg"]                                     ; -- Not used here
+--ken ResWhen        ["Ww"]["Hh"]["Ee"]["Nn"]                                           ; -- Not used here
+
+-- SciDb expressions (Precedence follows C language conventions)
+Eor              . Exp  ::= Exp  ResOr  Exp1                    ;
+Eand             . Exp1 ::= Exp1 ResAnd Exp2                    ;
+Eeq              . Exp2 ::= Exp2 "="    Exp3                    ;
+Ene              . Exp2 ::= Exp2 "<>"   Exp3                    ;
+Elt              . Exp3 ::= Exp3 "<"    Exp4                    ;
+Egt              . Exp3 ::= Exp3 ">"    Exp4                    ;
+Ele              . Exp3 ::= Exp3 "<="   Exp4                    ;
+Ege              . Exp3 ::= Exp3 ">="   Exp4                    ;
+EAdd             . Exp4 ::= Exp4 "+"    Exp5                    ;
+ESub             . Exp4 ::= Exp4 "-"    Exp5                    ;
+EMul             . Exp5 ::= Exp5 "*"    Exp6                    ;
+EDiv             . Exp5 ::= Exp5 "/"    Exp6                    ;
+EMod             . Exp5 ::= Exp5 "%"    Exp6                    ;
+ENeg             . Exp7 ::=      "-"    Exp6                    ;
+EFunc            . Exp8 ::= Id "(" [Exp] ")"                    ;
+separator          Exp      ","                                 ;
+EVersion         . Exp8 ::= Id "@" Integer                      ;
+EArrayVar        . Exp8 ::= Id "." Id                           ;
+EOption          . Exp8 ::= Id ":" Exp                          ; -- shift/reduce conflicts: +42
+EAsId            . Exp9 ::= Exp8 ResAs Id                       ;
+EAsc             . Exp9 ::= Exp8 ResAsc                         ;
+EDesc            . Exp9 ::= Exp8 ResDesc                        ;
+EVar             . Exp10::= Id                                  ;
+EScheme          . Exp10::= Schema                              ;
+EString          . Exp10 ::= AString                            ;
+EFalse           . Exp10 ::= ResFalse                           ;
+ETrue            . Exp10 ::= ResTrue                            ;
+ENull            . Exp10 ::= ResNull                            ;
+EInt             . Exp10 ::= Integer                            ;
+EDouble          . Exp10 ::= ADouble                            ;
+EWildcard        . Exp10 ::= "*"                                ;
+EDefault         . Exp10 ::= "?"                                ;
+coercions          Exp      10                                  ;
+token ADouble digit+ (('.' digit+ (["Ee"] '-'? digit+)?)
+                      |(["Ee"] '-'? digit+)
+                     )                                          ;
+token AString ('\'' ((char - ["'\\"] ) | ('\\' ["'\\"]))* '\'') ;
+
+-- AFL
+Queries    . AFL   ::= [Query]                              ;
+terminator Query       ";"                                  ;
+QueryNil   . Query ::=                                      ;
+QueryExp   . Query ::= Exp                                  ;
+QueryArray . Query ::= ResCreate         ResArray Id Schema ;
+QueryTemp  . Query ::= ResCreate ResTemp ResArray Id Schema ;
+
+Scheme . Schema              ::= "<" [Attribute] ">" "[" Dimensions "]" ;
+separator nonempty Attribute     ","                                    ;
+
+Attrib . Attribute ::= Id ":" Id NullableOption DefaultOption CompressionOption ;
+
+NullabeOff     . NullableOption    ::=                        ;
+NullableOn     . NullableOption    ::= ResNull                ;
+NullableNot    . NullableOption    ::= ResNot ResNull         ;
+DefaultOff     . DefaultOption     ::=                        ;
+DefaultOn      . DefaultOption     ::= ResDefault Exp6        ;
+CompressionOff . CompressionOption ::=                        ;
+CompressionOn  . CompressionOption ::= ResCompression AString ;
+
+Dim            . Dimensions ::= Dimension                          ;
+DimSemicolon   . Dimensions ::= Dimension ";" Dimensions           ;
+DimComma       . Dimensions ::= Dimension "," Dimensions           ; -- shift/reduce conflicts: +1
+DimId          . Dimension  ::= Id                                 ;
+DimLoHi        . Dimension  ::= Id "=" Exp ":" Exp                 ;
+DimLoHiOverlap . Dimension  ::= Id "=" Exp ":" Exp ":" Exp         ;
+DimAll         . Dimension  ::= Id "=" Exp ":" Exp ":" Exp ":" Exp ;
+DimDeprecated  . Dimension  ::= Id "=" Exp ":" Exp "," Exp "," Exp ;
+
+--------------------------------------------------------------------------------
+
+-- Identifier (Id) is last as a catch all
+token Id letter (letter | digit | '_')* ;
