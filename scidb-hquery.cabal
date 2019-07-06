@@ -1,6 +1,6 @@
 cabal-version: 2.4
 name: scidb-hquery
-version: 2.8.0.430
+version: 2.8.0.431
 license: GPL-3.0-only
 license-file: LICENSE
 copyright: All rights reserved 2014-19(c).
@@ -16,6 +16,9 @@ description:
     page and http://www.paradigm4.com/ for more infomation.
 category: Database
 build-type: Custom
+-- The entry src/SciDbAFL.cf in extra-source-files below is a
+-- workaround for issue https://github.com/haskell/cabal/issues/6124
+-- so that cabal new-sdist works.
 extra-source-files:
     CHANGELOG.md
     src/SciDbAFL.cf
@@ -44,6 +47,9 @@ library
         LexSciDbAFL
         ParSciDbAFL
         PrintSciDbAFL
+-- The entry SciDbAFL in extra-source-files below is a workaround for
+-- issue https://github.com/haskell/cabal/issues/6124
+-- so that cabal new-sdist works.
     autogen-modules:
         SciDbAFL
         AbsSciDbAFL
