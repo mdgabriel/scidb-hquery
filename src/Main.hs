@@ -454,8 +454,8 @@ config :: Configuration
 config =
     Config {
             argOrder       = RequireOrder,
-            -- Update revision number: toggle case
-            release        = "2.8.0.431",
+            -- Update revision number: TOGGLE CASE
+            release        = "2.8.0.432",
             flagsOps       = " [[-g|-h|-l|-m|-v|-y] |"++
                              "\n                 [-V n] [-t hstfile] [-c certstore] [-n]"++
                              "\n                   [-r http[s]] [-i host] [-p port] [-a true|false]"++

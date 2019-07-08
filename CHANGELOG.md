@@ -7,3 +7,7 @@
 ## 2.8.0.431 -- 2019-07-06
 
 * Ready to be uploaded to hackage.
+
+## 2.8.0.432 -- 2019-07-08
+
+* Corrected problems discovered with cabal candidate package 2.8.0.431.
