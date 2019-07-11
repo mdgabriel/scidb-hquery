@@ -1,6 +1,6 @@
 cabal-version: 2.4
 name: scidb-hquery
-version: 2.8.0.432
+version: 2.8.0.433
 license: GPL-3.0-only
 license-file: LICENSE
 copyright: All rights reserved 2014-19(c).
@@ -24,12 +24,13 @@ build-type: Custom
 -- so that cabal new-sdist works.
 extra-source-files:
     CHANGELOG.md
+    README.md
     src/SciDbAFL.cf
 
 source-repository head
     type: git
     location: https://github.com/mdgabriel/scidb-hquery.git
-    tag: 2.8.0.432
+    tag: 2.8.0.433
 
 custom-setup
     setup-depends: base >=4.12.0.0 && <4.13,

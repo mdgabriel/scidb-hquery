@@ -11,3 +11,7 @@
 ## 2.8.0.432 -- 2019-07-08
 
 * Corrected problems discovered with cabal candidate package 2.8.0.431.
+
+## 2.8.0.433 -- 2019-07-11
+
+* Added README.md to extra-source-files.
