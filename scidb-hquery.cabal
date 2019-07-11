@@ -1,6 +1,6 @@
 cabal-version: 2.4
 name: scidb-hquery
-version: 2.8.0.433
+version: 2.8.0.434
 license: GPL-3.0-only
 license-file: LICENSE
 copyright: All rights reserved 2014-19(c).
@@ -10,13 +10,10 @@ homepage: https://github.com/mdgabriel/scidb-hquery.git
 bug-reports: https://github.com/mdgabriel/scidb-hquery/issues
 synopsis: Haskell query for SciDB via shim
 description:
-     The command @hquery@ with no operands and no options will begin an
+     The command hquery with no operands and no options will begin an
      interacitve session with a SciDB server using SciDB's shim
-     protocol at host localhost and port 8080.  See
-     https:\/\/github.com\/mdgabriel\/scidb-hquery.git,
-     @hquery -m@, and
-     http:\/\/www.paradigm4.com
-     for more infomation.
+     protocol at host localhost and port 8080.  See the [homepage](https://github.com/mdgabriel/scidb-hquery.git),
+     "hquery -m", and [www.paradigm4.com](http://www.paradigm4.com) for more infomation.
 category: program, client, database, library
 build-type: Custom
 -- The entry src/SciDbAFL.cf in extra-source-files below is a
@@ -30,7 +27,7 @@ extra-source-files:
 source-repository head
     type: git
     location: https://github.com/mdgabriel/scidb-hquery.git
-    tag: 2.8.0.433
+    tag: 2.8.0.434
 
 custom-setup
     setup-depends: base >=4.12.0.0 && <4.13,

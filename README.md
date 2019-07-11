@@ -1,6 +1,34 @@
-# scidb-hquery
-<pre>
-hquery(1)                    User Command                   hquery(1)
+# SciDB and the hquery command
+
+SciDB is a column-oriented database management system (DBMS) designed
+for multidimensional data management and analytics common to
+scientific, geospatial, industrial, and financial applications.  See
+<http://www.paradigm4.com/> and <http://www.paradigm4.com/forum> for
+more information about the Data Management and Analytics Software
+System (DMAS) known as SciDB.
+
+The hquery command is a Haskell command line and interactive
+interpreter for SciDB AFL queries via shim.  See also
+
+  * hquery -y,
+  * hquery -h, or
+  * hquery -m
+
+for more information
+
+There is a primitive API derived after the creation of hquery
+defined by the following data structures and actions:
+
+  * Environment
+  * Err
+  * mkGlobalManagerEnv
+  * runQueries
+  * unsafeRunQuery
+  * getSciDbVersion
+
+# The hquery manual page
+
+```hquery(1)                    User Command                   hquery(1)
 
 NAME
    hquery - Haskell query for SciDB via shim
@@ -8,8 +36,9 @@ NAME
 SYNOPSIS
    hquery [-V n] [-t hstfile] [-c certstore] [-n]
              [-r http[s]] [-i host] [-p port] [-a true|false]
-               [-e true|false] [-o fmt] [-b num] [-d|-s] [-u usr] [-w pw]
-                 [-f qyfile] [query...]
+               [-e true|false] [-o fmt] [-b num] [-d|-s]
+                 [-u usr] [-w pw]
+                   [-f qyfile] [query...]
    hquery -g
    hquery -h
    hquery -l
@@ -228,17 +257,17 @@ USAGE NOTES
    authorization (-s) or prefix (-x) actually works.
 
 EXAMPLES
-   To list all currently defined arrays with SciDB authorization required,
-   use
+   To list all currently defined arrays with SciDB authorization
+   required, use
 
      hquery -i coordinator -s -u ScidB -w SciDBPassword \
          "n=0; list('arrays');"
 
-   To list up to 100 lines of functions with digest authorization required,
-   use
+   To list up to 100 lines of functions with digest authorization
+   required, use
 
-     hquery -i coordinator -d -u Digest -w DigestPassword \
-         "n=100; list('arrays');"
+     hquery -i coordinator -d -u Digest \
+         -w DigestPassword "n=100; list('arrays');"
 
    To list up to 23 lines of operators, 23 being the default, use
 
@@ -252,16 +281,16 @@ EXAMPLES
 
      hquery -i coordinator "create array A <x:double> [i=0:99:0:10];"
 
-   To execute the file of queries HQTests.qy with no authorization required
-   via a TLS connection, use
+   To execute the file of queries HQTests.qy with no authorization
+   required via a TLS connection, use
 
      hquery -c ssl_cert.pem  -r https -i coordinator -f HQTest.qy
 
    To execute the file of queries HQTests.qy with digest authorization
    required via a TLS connection insecurely, use
 
-     hquery -n -r https -i coordinator -d -u Digest -w DigestPassword \
-         -f HQTests.qy
+     hquery -n -r https -i coordinator -d -u Digest \
+         -w DigestPassword -f HQTests.qy
 
    To list all arrays in the sensor_data namespace, use
 
@@ -293,8 +322,10 @@ EXIT STATUS
 
      EXIT CODE    MEANING
          1        Unknown error.
-         2        No authorization specified (-s|-d) with username/password.
-         3        Invalid protocol, hostname, port, or history file option.
+         2        No authorization specified (-s|-d) with
+	          username/password.
+         3        Invalid protocol, hostname, port, or history
+	          file option.
          4        Cannot connect to hostname:port.
          5        Unreadable query file.
          6        Unreadable certicate store file.
@@ -316,8 +347,9 @@ SEE ALSO
    and https://www.paradigm4.com/forum for more information.
 
 NOTES
-   Please send bug reports to https://github.com/mdgabriel/scidb-hquery/issues.
+   Please send bug reports to
+   https://github.com/mdgabriel/scidb-hquery/issues.
 
 BUGS
    No known bugs to date.
-</pre>
+```

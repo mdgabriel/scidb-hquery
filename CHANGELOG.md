@@ -15,3 +15,7 @@
 ## 2.8.0.433 -- 2019-07-11
 
 * Added README.md to extra-source-files.
+
+## 2.8.0.434 -- 2019-07-12
+
+* Improved README.md and description documentation.
