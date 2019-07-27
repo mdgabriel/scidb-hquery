@@ -19,3 +19,7 @@
 ## 2.8.0.434 -- 2019-07-12
 
 * Improved README.md and description documentation.
+
+## 2.8.0.435 -- 2019-07-27
+
+* Now works with stack.
