@@ -142,13 +142,13 @@ getSciDbVersion e = withSocketsDo (runReaderT (evalStateT fetchVersion defaultPa
 
 -- | Given an 'Environment', make and set the global network manager,
 -- check for digest authorization and the SciDB version, and update
--- the 'Environment'.  Either return 'Just Environment' or 'Nothing'
+-- the 'Environment'.  Either return 'Just' 'Environment' or 'Nothing'
 -- in the IO monad in the case of an invalid certificate store when
 -- the protocol is HTTPS and insecure validation is not used.  Be
 -- careful: no resolving or verification of the 'Environment' is
--- performed.  When 'mkGlobalManagerEnv' returns 'Just Environment',
+-- performed.  When 'mkGlobalManagerEnv' returns 'Just' 'Environment',
 -- this is the initialized 'Environment' to be used with the actions
--- 'runQueries' and 'unsafeRunQuery'.
+-- 'runQueries' and 'unsafeRunQuery' and the function 'getSciDbVersion'.
 
 mkGlobalManagerEnv :: Environment -> IO (Maybe Environment)
 mkGlobalManagerEnv env =

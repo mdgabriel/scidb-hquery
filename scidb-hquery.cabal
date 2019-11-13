@@ -1,6 +1,6 @@
 cabal-version: 2.4
 name: scidb-hquery
-version: 2.8.0.435
+version: 2.8.0.436
 license: GPL-3.0-only
 license-file: LICENSE
 copyright: All rights reserved 2014-19(c).
@@ -14,17 +14,19 @@ description:
     interacitve session with a SciDB server using SciDB's shim
     protocol at host localhost and port 8080.  See the [homepage](https://github.com/mdgabriel/scidb-hquery.git),
     "hquery -m", and [www.paradigm4.com](http://www.paradigm4.com) for more infomation.
+    Note that scidb-hquery builds with cabal v2-build and stack resolver lts-14.14.
 category: program, client, database, library
 build-type: Custom
 extra-source-files:
     CHANGELOG.md
     README.md
     src/SciDbAFL.cf
+tested-with: GHC==8.6.5
 
 source-repository head
     type: git
     location: https://github.com/mdgabriel/scidb-hquery.git
-    tag: 2.8.0.435
+    tag: 2.8.0.436
 
 custom-setup
     setup-depends: base >=4.12.0.0 && <4.13,
@@ -77,6 +79,8 @@ library
         mtl >=2.2.2 && <2.3,
         network >=2.8.0.1 && <3.2,
         process >=1.6.5.0 && <1.7,
+        -- base-compat constraint needed so that regex continues to compile
+        base-compat >=0.6 && <0.11,
         regex >=1.0.2.0 && <1.1,
         safe >=0.3.17 && <0.4,
         split >=0.2.3.3 && <0.3,
@@ -131,6 +135,8 @@ executable hquery
         mtl >=2.2.2 && <2.3,
         network >=2.8.0.1 && <3.2,
         process >=1.6.5.0 && <1.7,
+        -- base-compat constraint needed so that regex continues to compile
+        base-compat >=0.6 && <0.11,
         regex >=1.0.2.0 && <1.1,
         safe >=0.3.17 && <0.4,
         split >=0.2.3.3 && <0.3,

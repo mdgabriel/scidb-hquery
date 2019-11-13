@@ -23,3 +23,7 @@
 ## 2.8.0.435 -- 2019-07-27
 
 * Now works with stack.
+
+## 2.8.0.436 -- 2019-11-13
+
+* Added a base-compat constraint so that regex always compiles and added tested-with to the cabal file. Changed the stack resolver to lts-14.14.  Small improvement in the documentation.
