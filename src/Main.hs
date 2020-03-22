@@ -68,7 +68,7 @@ for 'hquery':
 >    hquery - Haskell query for SciDB via shim
 > 
 > SYNOPSIS
->    hquery [-V n] [-t hstfile] [-c certstore] [-n]
+>    hquery [-V n] [-W] [-t hstfile] [-c certstore] [-n]
 >              [-r http[s]] [-i host] [-p port] [-a true|false]
 >                [-e true|false] [-o fmt] [-b num] [-d|-s] [-u usr] [-w pw]
 >                  [-f qyfile] [query...]
@@ -276,6 +276,10 @@ for 'hquery':
 >   -V1 Shows some HTTP exceptions and trace information (--verbose=1).
 >   -V2 Shows additional URL information (--verbose=2).
 > 
+>    -W Wait on stdin (--wait-on-stdin).  In some cases, hquery can
+>       determine that stdin is ready in which case it is consumed.
+>       The -W option guarantees that hquery waits on stdin.
+> 
 > OPERANDS
 >    SciDB AFL queries.
 > 
@@ -283,11 +287,11 @@ for 'hquery':
 >    The development of the utility hquery began with SciDB community
 >    edition 13 and continued with 14, 15, 16, 18, and 19.
 > 
->    This version of hquery has been lightly tested with ghc
->    version 8.2.2 and 8.6.5 and SciDB 18.1 and 19.3 community edition.
+>    This version of hquery has been lightly tested with ghc version
+>    8.2.2 and 8.6.5 and SciDB 18.1, 19.3 and 19.11 community edition.
 >    Currently the command hquery has never been tested on a SciDB
->    enterprise >    edition, and thus it is not known if SciDB
->    authorization (-s) or prefix (-x) actually works.
+>    enterprise edition, and thus it is not known if SciDB authorization
+>    (-s) or a prefix (-x) actually works.
 > 
 > EXAMPLES
 >    To list all currently defined arrays with SciDB authorization required,
@@ -329,6 +333,11 @@ for 'hquery':
 > 
 >      hquery -i coordinator -b 0 -x "set_namespace('sensor_data');" \
 >          "list('arrays');"
+> 
+>    To find and project the arrays A, B, C and D to be removed, use
+> 
+>      hquery -otsv "project(apply(filter(list('arrays'),regex(name,'A|B|C|D')),
+>          remove,'remove('+name+');'),remove);" | hquery -W
 > 
 >    To display a synopsis of this internal manual page, use
 > 
@@ -455,9 +464,9 @@ config =
     Config {
             argOrder       = RequireOrder,
             -- Update revision number: toggle case
-            release        = "2.8.0.436",
+            release        = "2.8.0.437",
             flagsOps       = " [[-g|-h|-l|-m|-v|-y] |"++
-                             "\n                 [-V n] [-t hstfile] [-c certstore] [-n]"++
+                             "\n                 [-V n] [-W] [-t hstfile] [-c certstore] [-n]"++
                              "\n                   [-r http[s]] [-i host] [-p port] [-a true|false]"++
                              "\n                     [-e true|false] [-o fmt] [-b num] [-d|-s] [-u usr] [-w pw]"++
                              "\n                       [-f qyfile] [query...]"++
@@ -475,7 +484,7 @@ Flags set as a function of the command line options supplied.
 -}
 data Flag = Help | License | Manual | Synopsis | Version | Verbose Verbosity
           | Host String | Port String | Protocol String | File FilePath
-          | History String | Username String | Password String
+          | History String | Username String | Password String | WaitOnStdIn
           | Fetch String | Format String | Number String | VersionSciDb
           | DigestAuth | SciDbAuth | CertStore String | Insecure
           | ReadingLines String | Prefix String
@@ -508,6 +517,7 @@ options =
     , Option "y" ["synopsis"] (NoArg Synopsis)             "Help synopsis."
     , Option "x" ["prefix"]   (ReqArg Prefix "PREFIX")     "Prefix to execute before a query by shim."
     , Option "V" ["verbose"]  (OptArg inpver "012")        "Verbose information to stderr."
+    , Option "W" ["wait-on-stdin"] (NoArg WaitOnStdIn)     "Wait on stdin."
     ]
     where inpver :: Maybe String -> Flag
           inpver ms = Verbose $ case (fromMaybe (-1) . readMay . fromMaybe "1") ms of
@@ -546,6 +556,7 @@ updateEnvField env opt =
       Version    -> env{version   =   True}
       VersionSciDb->env{versionSciDb= True}
       Verbose v  -> env{verbose   =      v}
+      WaitOnStdIn-> env{waitOnStdIn = True}
     where tOrF s = case fmap toLower s of
                      "true"  -> Just True
                      "false" -> Just False

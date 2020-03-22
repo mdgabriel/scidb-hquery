@@ -74,7 +74,7 @@ import Environment                            (Environment(certStore,defFetch,de
                                                           ,defReadingLines,defPrefix,digestAuth
                                                           ,digestHeaders,file,history,host,insecure
                                                           ,operands,password,port,protocol,sciDbVersion
-                                                          ,scidbAuth,username,verbose)
+                                                          ,scidbAuth,username,verbose,waitOnStdIn)
                                                ,defaultEnv,maybePort,Verbosity(..))
 import ErrM                                   (Err(..))
 import Interpreter                            (Results(..),interpret)
@@ -201,7 +201,7 @@ maybeSetDigestAuth r =
 -- 'defNumber' lines (23 by default); an exception occurs when
 -- attempting to fetch no returned lines.  If fetch is false, do not
 -- fetch any lines. For exmample, fetch should be set to false for
--- store, create and load.  See 'interpretOperatorId' in
+-- store, create and load.  See 'interpretFuncId' in
 -- Interpreter.hs for details.
 
 unsafeRunQuery :: Environment -> String -> IO String
@@ -240,11 +240,11 @@ hquery e = withSocketsDo (runReaderT (evalStateT _hquery defaultParam) e)
               do initParam
                  e <- ask
                  r <- liftIO $ hReady stdin
-                 if null (operands e) && null (file e) && not r
+                 if null (operands e) && null (file e) && not (waitOnStdIn e) && not r
                  then do liftIO $ putStrLn ("SciDB version "++sciDbVersion e)
                          executeQuery DontExitOnBad "list('instances');"
                          iQuery
-                 else do c <- liftIO $ if r then getContents else return ""
+                 else do c <- liftIO $ if r || waitOnStdIn e then getContents else return ""
                          f <- liftIO $ (if null (file e) then return else readFile) (file e)
                          let a = intercalate "\n" ("":(nolines <$> operands e))
                          executeQuery ExitOnBad (c ++ f ++ a)

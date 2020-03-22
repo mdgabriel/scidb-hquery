@@ -19,7 +19,7 @@ internalManual =
     "   hquery - Haskell query for SciDB via shim\n"++
     "\n"++
     "SYNOPSIS\n"++
-    "   hquery [-V n] [-t hstfile] [-c certstore] [-n]\n"++
+    "   hquery [-V n] [-W] [-t hstfile] [-c certstore] [-n]\n"++
     "             [-r http[s]] [-i host] [-p port] [-a true|false]\n"++
     "               [-e true|false] [-o fmt] [-b num] [-d|-s] [-u usr] [-w pw]\n"++
     "                 [-f qyfile] [query...]\n"++
@@ -227,6 +227,10 @@ internalManual =
     "  -V1 Shows some HTTP exceptions and trace information (--verbose=1).\n"++
     "  -V2 Shows additional URL information (--verbose=2).\n"++
     "\n"++
+    "   -W Wait on stdin (--wait-on-stdin).    In some cases, hquery can\n"++
+    "      determine that stdin is ready in which case it is consumed.\n"++
+    "      The -W option guarantees that hquery waits on stdin.\n"++
+    "\n"++
     "OPERANDS\n"++
     "   SciDB AFL queries.\n"++
     "\n"++
@@ -234,11 +238,11 @@ internalManual =
     "   The development of the utility hquery began with SciDB community\n"++
     "   edition 13 and continued with 14, 15, 16, 18, and 19.\n"++
     "\n"++
-    "   This version of hquery has been lightly tested with ghc\n"++
-    "   version 8.2.2 and 8.6.5 and SciDB 18.1 and 19.3 community edition.\n"++
-    "   Currently the command hquery has never been tested on a SciDB\n"++
-    "   enterprise edition, and thus it is not known if SciDB\n"++
-    "   authorization (-s) or prefix (-x) actually works.\n"++
+    "    This version of hquery has been lightly tested with ghc version\n"++
+    "    8.2.2 and 8.6.5 and SciDB 18.1, 19.3 and 19.11 community edition.\n"++
+    "    Currently the command hquery has never been tested on a SciDB\n"++
+    "    enterprise edition, and thus it is not known if SciDB authorization\n"++
+    "    (-s) or a prefix (-x) actually works.\n"++
     "\n"++
     "EXAMPLES\n"++
     "   To list all currently defined arrays with SciDB authorization required,\n"++
@@ -280,6 +284,11 @@ internalManual =
     "\n"++
     "     hquery -i coordinator -b 0 -x \"set_namespace('sensor_data');\" \\\n"++
     "         \"list('arrays');\"\n"++
+    "\n"++
+    "   To find and project the arrays A, B, C and D to be removed, use\n"++
+    "\n"++
+    "     hquery -otsv \"project(apply(filter(list('arrays'),regex(name,'A|B|C|D')),\n"++
+    "         remove,'remove('+name+');'),remove);\" | hquery -W\n"++
     "\n"++
     "   To display a synopsis of this internal manual page, use\n"++
     "\n"++

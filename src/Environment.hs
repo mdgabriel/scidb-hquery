@@ -46,6 +46,7 @@ data Environment =
         , password    :: String       -- ^ Password for username
         , operands    :: [String]     -- ^ List of queries
         , file        :: String       -- ^ File of queries
+        , waitOnStdIn :: Bool         -- ^ Wait on stdin
         , help        :: Bool         -- ^ @-h@, display help summary
         , license     :: Bool         -- ^ @-l@, display license terms
         , manual      :: Bool         -- ^ @-m@, display internal man page
@@ -86,6 +87,7 @@ defaultEnv =
         , password    = ""                      -- Password needed for -d or -s option
         , operands    = []                      -- No operands by default, i.e., interactive mode
         , file        = ""                      -- No file of queries by default
+        , waitOnStdIn = False                   -- Wait on stdin
         , help        = False                   -- False or off by default
         , license     = False                   -- False or off by default
         , manual      = False                   -- False or off by default

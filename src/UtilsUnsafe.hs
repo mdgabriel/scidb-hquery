@@ -15,7 +15,6 @@ import qualified Data.ByteString       as B (empty)
 import qualified Data.ByteString.Char8 as C (pack)
 
 import Control.Monad            (unless)
-import Crypto.Hash              --()
 import Data.Char                (toLower)
 import Data.Default.Class       (def)
 import Data.Maybe               (fromMaybe,fromJust,isNothing)

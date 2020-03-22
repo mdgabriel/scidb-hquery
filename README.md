@@ -34,7 +34,7 @@ NAME
    hquery - Haskell query for SciDB via shim
 
 SYNOPSIS
-   hquery [-V n] [-t hstfile] [-c certstore] [-n]
+   hquery [-V n] [-W] [-t hstfile] [-c certstore] [-n]
              [-r http[s]] [-i host] [-p port] [-a true|false]
                [-e true|false] [-o fmt] [-b num] [-d|-s]
                  [-u usr] [-w pw]
@@ -243,6 +243,10 @@ OPTIONS
   -V1 Shows some HTTP exceptions and trace information (--verbose=1).
   -V2 Shows additional URL information (--verbose=2).
 
+   -W Wait on stdin (--wait-on-stdin).  In some cases, hquery can
+      determine that stdin is ready in which case it is consumed.
+      The -W option guarantees that hquery waits on stdin.
+
 OPERANDS
    SciDB AFL queries.
 
@@ -250,11 +254,11 @@ USAGE NOTES
    The development of the utility hquery began with SciDB community
    edition 13 and continued with 14, 15, 16, 18, and 19.
 
-   This version of hquery has been lightly tested with ghc
-   version 8.2.2 and 8.6.5 and SciDB 18.1 and 19.3 community edition.
+   This version of hquery has been lightly tested with ghc version
+   8.2.2 and 8.6.5 and SciDB 18.1, 19.3 and 19.11 community edition.
    Currently the command hquery has never been tested on a SciDB
-   enterprise edition, and thus it is not known if SciDB
-   authorization (-s) or prefix (-x) actually works.
+   enterprise edition, and thus it is not known if SciDB authorization
+   (-s) or a prefix (-x) actually works.
 
 EXAMPLES
    To list all currently defined arrays with SciDB authorization
@@ -296,6 +300,11 @@ EXAMPLES
 
      hquery -i coordinator -b 0 -x "set_namespace('sensor_data');" \
          "list('arrays');"
+
+   To find and project the arrays A, B, C and D to be removed, use
+     
+     hquery -otsv "project(apply(filter(list('arrays'),regex(name,'A|B|C|D')),
+         remove,'remove('+name+');'),remove);" | hquery -W
 
    To display a synopsis of this internal manual page, use
 
