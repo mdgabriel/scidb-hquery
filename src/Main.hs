@@ -80,7 +80,7 @@ for 'hquery':
 >    hquery -y
 > 
 > AVAILABILITY
->    Marcus D. Gabriel.  All rights reserved 2014-19(c).
+>    Marcus D. Gabriel.  All rights reserved 2014-20(c).
 > 
 >    marcus@gabriel.name
 > 

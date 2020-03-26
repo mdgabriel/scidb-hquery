@@ -31,7 +31,7 @@ internalManual =
     "   hquery -y\n"++
     "\n"++
     "AVAILABILITY\n"++
-    "   Marcus D. Gabriel.  All rights reserved 2014-19(c).\n"++
+    "   Marcus D. Gabriel.  All rights reserved 2014-20(c).\n"++
     "\n"++
     "   marcus@gabriel.name\n"++
     "\n"++
